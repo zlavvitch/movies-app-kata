@@ -1,0 +1,73 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["plugin:react/recommended", "airbnb", "prettier"],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react", "prettier"],
+  "rules": {
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "prettier/prettier": "error",
+    "linebreak-style": [0, "unix"],
+    "quotes": ["error", "double"],
+    "semi": 0,
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": 0,
+    "react/prefer-stateless-function": 2,
+    "react/jsx-pascal-case": 2,
+    "react/jsx-boolean-value": 2,
+    "react/jsx-closing-bracket-location": 2,
+    "react/self-closing-comp": [
+      "error",
+      {
+        "component": true,
+        "html": true
+      }
+    ],
+    "jsx-a11y/label-has-associated-control": [
+      2,
+      {
+        "labelComponents": ["CustomInputLabel"],
+        "labelAttributes": ["label"],
+        "controlComponents": ["CustomButton"],
+        "ignoreElements": ["button"],
+        "depth": 3
+      }
+    ],
+    "import/no-unresolved": [2, { "caseSensitive": false }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-plusplus": 0,
+    "import/order": [
+      2,
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ],
+        "newlines-between": "always"
+      }
+    ]
+    // "no-underscore-dangle": [
+    //   "error",
+    //   { "allow": ["_apiBase", "_apiKey", "_transformMovie"] }
+    // ]
+    // ,
+    // "eslint class-methods-use-this": [
+    //   "error",
+    //   { "exceptMethods": ["formatDate", "reductionText"] }
+    // ]
+    // "react/function-component-definition": [
+    //   2,
+    //   { "namedComponents": "arrow-function" }
+    // ]
+  }
+}
