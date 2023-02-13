@@ -1,6 +1,18 @@
 .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 387px;
+
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  border: 1px solid rgba(28, 28, 31, 0.1);
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
   &__img {
-    max-width: 183px;
+    width: 123px;
+    height: 221px;
   }
 
   &__content {
@@ -10,13 +22,64 @@
     padding: 10px 20px 0 20px;
   }
 
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__rate {
+    min-width: 30px;
+    max-height: 30px;
+    text-align: center;
+    border: 2px solid;
+    border-radius: 50%;
+  }
+
   &__title {
-    font-size: 20px;
-    line-height: 28px;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  &__date {
+    font-size: 10px;
+    line-height: 14px;
   }
 
   &__description {
     font-size: 12px;
     line-height: 22px;
+  }
+
+  &__pagination {
+    font-size: 13px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .card {
+    flex-direction: row;
+
+    max-width: 450px;
+    max-height: 281px;
+
+    &__img {
+      width: 183px;
+      height: 281px;
+    }
+
+    &__pagination {
+      font-size: 15px;
+    }
+  }
+}
+
+@media screen and (min-width: 1366px) {
+  .card {
+    flex-basis: 45%;
+
+    &__pagination {
+      font-size: 18px;
+    }
   }
 }
