@@ -1,31 +1,42 @@
 .card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 387px;
+  width: 100%;
 
-  padding-top: 10px;
-  padding-bottom: 10px;
+  max-width: 387px;
+  min-height: 200px;
+  padding: 6px 8px 15px 10px;
 
   border: 1px solid rgba(28, 28, 31, 0.1);
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
+  position: relative;
+
   &__img {
-    width: 123px;
-    height: 221px;
+    width: 60px;
+    height: 91px;
+
+    position: absolute;
   }
 
   &__content {
     display: flex;
     flex-direction: column;
+   
     gap: 8px 0;
-    padding: 10px 20px 0 20px;
   }
 
   &__header {
     display: flex;
+    flex-direction: column;
+    min-height: 91px;
+    margin-left: 83px;
+    margin-bottom: 15px;
+  }
+
+  &__info {
+    display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 10px;
   }
 
   &__rate {
@@ -42,33 +53,53 @@
   }
 
   &__date {
-    font-size: 10px;
-    line-height: 14px;
+    font-size: 12px;
+    line-height: 22px;
+    font-weight: 400;
+    color: #827e7e;
+    margin-bottom: 10px;
   }
 
   &__description {
     font-size: 12px;
     line-height: 22px;
+    margin-bottom: 10px;
   }
 
-  &__pagination {
+  &__rating {
+    align-self: flex-end;
     font-size: 13px;
   }
 }
 
 @media screen and (min-width: 768px) {
   .card {
+    display: flex;
+    align-items: center;
     flex-direction: row;
+    padding: 0;
 
     max-width: 450px;
     max-height: 281px;
 
     &__img {
+      position: unset;
       width: 183px;
       height: 281px;
     }
 
-    &__pagination {
+    &__content {
+      padding: 12px 9px 15px 20px;
+    }
+
+    &__header {
+      display: flex;
+      flex-direction: column;
+      min-height: 91px;
+      margin-left: 0;
+    }
+
+    &__rating {
       font-size: 15px;
     }
   }
@@ -78,7 +109,7 @@
   .card {
     flex-basis: 45%;
 
-    &__pagination {
+    &__rating {
       font-size: 18px;
     }
   }

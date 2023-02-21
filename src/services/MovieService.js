@@ -40,17 +40,18 @@ class MovieService {
     return { movies, totalMovies };
   };
 
-  getRatedMovies = async (page = 1) => {
+  getRatedMovies = async (page) => {
     const guestId = localStorage.getItem("guest");
 
     const res = await this.getResource(
       `${this.apiBase}/guest_session/${guestId}/rated/movies?api_key=${this.apiKey}&page=${page}`
     );
 
-    const ratedMovies = res.results.reverse().map(this.transformMovie);
+    const ratedMovies = res.results.map(this.transformMovie);
     const totalratedMovies = res.total_results;
+    const currPage = res.page;
 
-    return { ratedMovies, totalratedMovies };
+    return { ratedMovies, totalratedMovies, currPage };
   };
 
   postRatedMovie = async (movieId, rating) => {

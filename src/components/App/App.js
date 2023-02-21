@@ -18,6 +18,7 @@ export default class App extends Component {
 
     this.state = {
       movies: [],
+      savedPage: 1,
       savedMovies: new Map(),
       genresId: new Map(),
       currentValue: "",
@@ -36,14 +37,27 @@ export default class App extends Component {
   }
 
   componentDidUpdate(_, prevState) {
-    const { currentPage, currentValue, currentTab } = this.state;
+    const { currentPage, savedPage, currentValue, currentTab } = this.state;
 
-    if (currentTab === 2 && prevState.currentPage !== currentPage) {
-      this.getRatedMovies(currentPage);
+    if (prevState.currentTab !== currentTab && currentTab === 1) {
+      this.searchMovies(currentValue, savedPage);
     }
 
     if (currentTab === 1 && prevState.currentPage !== currentPage) {
-      this.searchMovies(currentValue, currentPage);
+      this.searchMovies(currentValue);
+    }
+
+    if (prevState.currentTab !== currentTab && currentTab === 2) {
+      this.getRatedMovies(currentPage);
+    }
+
+    if (
+      prevState.currentTab === currentTab &&
+      prevState.currentPage !== currentPage &&
+      currentTab === 2
+    ) {
+      this.getRatedMovies(currentPage);
+      window.scrollTo(0, 0);
     }
   }
 
@@ -56,14 +70,10 @@ export default class App extends Component {
   };
 
   onTabsChange = (key) => {
-    const { savedMovies } = this.state;
+    const { savedMovies, savedPage } = this.state;
     const tabsKey = key === "1" ? 1 : 2;
 
     this.setState({
-      movies: [],
-      currentValue: "",
-      currentPage: 1,
-      totalMovies: 0,
       currentTab: tabsKey,
     });
 
@@ -73,14 +83,16 @@ export default class App extends Component {
           savedMovies.delete(value.id);
         }
       });
+
+      this.setState({ savedMovies, currentPage: savedPage });
     }
 
     if (key === "2") {
-      this.getRatedMovies();
+      this.setState({ movies: [], currentPage: 1 });
     }
   };
 
-  searchMovies = (value) => {
+  searchMovies = (value, savedPage) => {
     if (!value) {
       this.setState({
         movies: [],
@@ -93,33 +105,66 @@ export default class App extends Component {
     }
 
     const { currentPage } = this.state;
+    let page;
+
+    if (savedPage) {
+      page = savedPage;
+    } else {
+      page = currentPage;
+    }
 
     this.onMoviesLoading();
     this.onCurrentValue(value);
 
     this.movieService
-      .getAllMovies(value, currentPage)
+      .getAllMovies(value, page)
       .then(this.onMoviesLoaded)
       .catch(this.onError);
   };
 
-  getRatedMovies = () => {
-    const { currentPage } = this.state;
-
+  getRatedMovies = (page) => {
     this.onMoviesLoading();
 
     this.movieService
-      .getRatedMovies(currentPage)
+      .getRatedMovies(page)
       .then(this.onRatedMoviesLoaded)
       .catch(this.onError);
   };
 
-  onRatedMoviesLoaded = ({ ratedMovies, totalratedMovies }) => {
-    this.setState({
-      movies: ratedMovies,
-      totalMovies: totalratedMovies,
-      loading: false,
-    });
+  onRatedMoviesLoaded = ({ ratedMovies, totalratedMovies, currPage }) => {
+    const { savedMovies } = this.state;
+    const arraySavedMovies = [...savedMovies.values()];
+
+    if (arraySavedMovies.length === ratedMovies.length) {
+      this.setState({
+        movies: ratedMovies,
+        savedMovies,
+        totalMovies: totalratedMovies,
+        loading: false,
+      });
+    } else {
+      const chunkSize = 20;
+      let movies;
+      let count = 1;
+
+      for (let i = 0; i < arraySavedMovies.length; i += chunkSize) {
+        const chunk = arraySavedMovies.slice(i, i + chunkSize);
+
+        if (count === currPage) {
+          movies = chunk;
+          count = 1;
+        }
+
+        count++;
+      }
+
+      this.setState({
+        movies,
+        savedMovies,
+        totalMovies: totalratedMovies,
+        loading: false,
+      });
+    }
   };
 
   onMoviesLoaded = ({ movies, totalMovies }) => {
@@ -138,7 +183,11 @@ export default class App extends Component {
     this.setState({ loading: false, error: true });
   };
 
-  onPageChange = (page) => {
+  onPageChangeMovie = (page) => {
+    this.setState({ currentPage: page, savedPage: page });
+  };
+
+  onPageChangeRated = (page) => {
     this.setState({ currentPage: page });
   };
 
@@ -222,6 +271,8 @@ export default class App extends Component {
 
     const offline = network ? <ErrorMessage text="No connection" /> : null;
 
+    // console.log("RENDRE", currentPage);
+
     return (
       <div className="container">
         {offline}
@@ -245,7 +296,7 @@ export default class App extends Component {
                       loading={loading}
                       currentPage={currentPage}
                       totalMovies={totalMovies}
-                      onPageChange={this.onPageChange}
+                      onPageChange={this.onPageChangeMovie}
                       currentValue={currentValue}
                       onRateChange={this.onRateChange}
                     />
@@ -263,8 +314,9 @@ export default class App extends Component {
                       movies={movies}
                       savedMovies={savedMovies}
                       totalMovies={totalMovies}
+                      currentPage={currentPage}
                       onRateChange={this.onRateChange}
-                      onPageChange={this.onPageChange}
+                      onPageChange={this.onPageChangeRated}
                     />
                   </MovieServiceProvider>
                 </div>

@@ -61,16 +61,18 @@ export default function MovieCard({
             <img className="card__img" src={poster} alt="Poster" />
             <div className="card__content">
               <div className="card__header">
-                <h2 className="card__title">{title}</h2>
-                <p className="card__rate" style={colorRate(rate)}>
-                  {formatRate(rate)}
-                </p>
+                <div className="card__info">
+                  <h2 className="card__title">{title}</h2>
+                  <p className="card__rate" style={colorRate(rate)}>
+                    {formatRate(rate)}
+                  </p>
+                </div>
+                <p className="card__date">{formatedDate}</p>
+                <div className="card__wrapper">{genreTags}</div>
               </div>
-              <p className="card__date">{formatedDate}</p>
-              <div className="card__wrapper">{genreTags}</div>
               <p className="card__description">{reductionText(description)}</p>
               <Rate
-                className="card__pagination"
+                className="card__rating"
                 allowHalf
                 value={rating}
                 count={10}

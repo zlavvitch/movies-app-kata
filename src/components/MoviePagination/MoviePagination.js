@@ -8,7 +8,7 @@ export default function MoviePagination({
   return (
     <Pagination
       className="movie-list__pagination"
-      defaultCurrent={currentPage}
+      current={currentPage}
       defaultPageSize={20}
       total={totalMovies}
       size="small"
